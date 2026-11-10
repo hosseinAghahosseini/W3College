@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace RealProject.Entities
 {
     public class Course : Base
     {
+        [Display(Name = "Course Name")]
         public string Name { get; set; }
         public long Price { get; set; }
         public int VoteScore { get; set; }

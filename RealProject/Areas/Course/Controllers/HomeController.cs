@@ -43,6 +43,31 @@ namespace RealProject.Areas.User.Controllers
             return View();
         }
 
+        public IActionResult Edit(int Id)
+        {
+            CourseService courseService = new CourseService(_context);
+            var course = courseService.Read(Id);
+            if (course == null)
+                return RedirectToAction("Index", new {Message = "error"});
+
+            return View(course);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Course Model)
+        {
+            CourseService courseService = new CourseService(_context);
+            var res = courseService.Update(Model);
+            if (res > 0)
+            {
+                return RedirectToAction("Index", new { Message = "success" });
+            }
+            else
+            {
+                return RedirectToAction("Index", new { Message = "error" });
+            }
+        }
+
         public IActionResult Privacy()
         {
             return View();
