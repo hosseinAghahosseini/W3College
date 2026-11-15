@@ -23,6 +23,12 @@ namespace RealProject.Areas.User.Controllers
 
         public IActionResult Create()
         {
+            InstructorService service = new InstructorService(_context);
+            var instructors = service.ReadAll();
+
+            ViewBag.Instructors = instructors;
+            ViewData["Instructors"] = instructors;
+
             return View();
         }
 
@@ -33,14 +39,12 @@ namespace RealProject.Areas.User.Controllers
             var res = courseService.Create(Model);
             if(res > 0)
             {
-
+                return RedirectToAction("Index", new { Message = "success" });
             }
             else
             {
-
+                return RedirectToAction("Index", new { Message = "error" });
             }
-
-            return View();
         }
 
         public IActionResult Edit(int Id)
@@ -66,6 +70,16 @@ namespace RealProject.Areas.User.Controllers
             {
                 return RedirectToAction("Index", new { Message = "error" });
             }
+        }
+
+        public IActionResult Delete(int Id)
+        {
+            CourseService courseService = new CourseService(_context);
+            var res = courseService.Delete(Id);
+            if (res > 0)
+                return RedirectToAction("Index", new { Message = "success" });
+            else
+                return RedirectToAction("Index", new { Message = "error" });
         }
 
         public IActionResult Privacy()

@@ -7,7 +7,10 @@ namespace RealProject.Entities
     {
         [Display(Name = "Course Name")]
         public string Name { get; set; }
+
+        [Display(Name = "قیمت")]
         public long Price { get; set; }
+
         public int VoteScore { get; set; }
         public string? Description { get; set; }
         //public string? Slug { get; set; }
