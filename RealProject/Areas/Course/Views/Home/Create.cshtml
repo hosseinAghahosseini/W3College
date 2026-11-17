@@ -41,8 +41,9 @@
             </div>
             <div class="form-group">
                 <label asp-for="ThumbnailUrl" class="control-label"></label>
-                <input asp-for="ThumbnailUrl" class="form-control" />
-                <span asp-validation-for="ThumbnailUrl" class="text-danger"></span>
+                @* <input asp-for="ThumbnailUrl" class="form-control" />
+                <span asp-validation-for="ThumbnailUrl" class="text-danger"></span> *@
+                <input type="file" name="UploadedFile" />
             </div>
             <div class="form-group">
                 <label asp-for="InstructorId" class="control-label"></label>

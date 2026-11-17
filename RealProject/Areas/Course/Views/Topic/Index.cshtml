@@ -2,24 +2,10 @@
 
 @{
     ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    // Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
-
-@foreach(var item in Model)
-{
-    <a href="">@item.Title</a>
-    <a href="">@item.Order</a>
-}
-
-@{
-    int i = 0;
-}
-@for(i = 1; i< 10; i++)
-{
-    <span>@i</span>
-}
+<h1>Topics @ViewBag.CourseName</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -74,5 +60,10 @@
         }
  
     }
-           </tbody>
+    </tbody>
 </table>
+
+@for (int i = 1; i <= (int)ViewBag.PageCount; i++)
+{
+    <a href="/Course/Topic/Index?Id=@ViewBag.CourseId&PageNum=@i">Page @i</a>
+}

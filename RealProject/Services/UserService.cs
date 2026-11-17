@@ -2,20 +2,8 @@
 
 namespace RealProject.Services
 {
-    public class UserService
+    public class UserService : BaseService<Instructor>
     {
-        private readonly AppDbContext _context;
-        public UserService(AppDbContext context)
-        {
-            _context = context;
-        }
-
-
-        public int Register(User user)
-        {
-            _context.Users.Add(user);
-            var res = _context.SaveChanges();
-            return res;
-        }
+        public UserService(AppDbContext context) : base(context) { }
     }
 }

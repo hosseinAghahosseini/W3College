@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using RealProject.Entities;
 using RealProject.Models;
 using RealProject.Services;
@@ -14,10 +14,24 @@ namespace RealProject.Areas.User.Controllers
             _context = context;
         }
 
-        public IActionResult Index(int Id)
+        public IActionResult Index(int Id, int PageNum = 1, int PageSize = 3)
         {
             TopicService service = new TopicService(_context);
-            var res = service.ReadAll();
+
+            var res = service.GetTopicsByCourseId(Id, PageNum, PageSize);
+            var count = service.GetCountTopicByCourseId(Id);
+
+            if (res.Any())
+            {
+                ViewBag.CourseName = res[0].Course.Name;
+                ViewBag.CourseId = res[0].CourseId;
+                ViewBag.PageCount = Math.Ceiling((double)count / (double)PageSize);
+            }
+            else
+            {
+                ViewBag.CourseName = "عنوان یافت نشد.";
+            }
+
             return View(res);
         }
 

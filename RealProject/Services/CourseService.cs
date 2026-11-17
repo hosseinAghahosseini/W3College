@@ -3,49 +3,23 @@ using RealProject.Entities;
 
 namespace RealProject.Services
 {
-    public class CourseService
+    public class CourseService : BaseService<Course>
     {
-        private readonly AppDbContext _context;
-        public CourseService(AppDbContext context)
-        {
-            _context = context;
-        }
+        public CourseService(AppDbContext context) : base(context) { }
 
-        public int Create(Course course)
+        //public Course? GetAllVideosOfACousre(int courseId)
+        public List<Video> GetAllVideosOfACousre(int courseId)
         {
-            _context.Courses.Add(course);
-            var res = _context.SaveChanges();
-            return res;
-        }
+            return _context.Videos
+                .Include(c => c.Topic)
+                .ThenInclude(c => c.Course)
+                .Where(c => c.Topic.CourseId == courseId)
+                .ToList();
 
-        public Course Read(int Id)
-        {
-            //select * from courses where Id = @Id
-            var res = _context.Courses.FirstOrDefault(c => c.Id == Id);
-            return res;
-        }
-
-        public List<Course> ReadAll()
-        {
-            //select * from courses
-            var res = _context.Courses.ToList();
-            return res;
-        }
-
-        public int Update(Course course)
-        {
-            _context.Courses.Update(course);
-            var res = _context.SaveChanges();
-            return res;
-        }
-
-        public int Delete(int Id)
-        {
-            var course = _context.Courses.FirstOrDefault(c => c.Id == Id);
-            if(course == null) return 0;
-            _context.Courses.Remove(course);
-            var res = _context.SaveChanges();
-            return res;
+            //return _context.Courses
+            //    .Include(c => c.Topics)
+            //    .ThenInclude(c => c.Videos)
+            //    .FirstOrDefault(c => courseId == c.Id);
         }
     }
 }

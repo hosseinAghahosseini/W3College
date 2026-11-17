@@ -17,6 +17,9 @@ namespace RealProject.Areas.User.Controllers
         public IActionResult Index()
         {
             CourseService courseService = new CourseService(_context);
+
+            var fullCourse = courseService.GetAllVideosOfACousre(3);
+
             var res = courseService.ReadAll();
             return View(res);
         }
@@ -33,9 +36,24 @@ namespace RealProject.Areas.User.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Course Model)
+        public async Task<IActionResult> Create(Course Model, IFormFile UploadedFile)
         {
             CourseService courseService = new CourseService(_context);
+
+            //image upload
+            if (UploadedFile != null)
+            {
+                string addr = "wwwroot/upload/courses";
+                string nameOfFile = UploadedFile.FileName;
+                var path = Path.Combine(Directory.GetCurrentDirectory(), addr, nameOfFile);
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await UploadedFile.CopyToAsync(stream);
+                }
+                addr = "/upload/users/";
+                Model.ThumbnailUrl = addr + nameOfFile;
+            }
+
             var res = courseService.Create(Model);
             if(res > 0)
             {
@@ -50,7 +68,7 @@ namespace RealProject.Areas.User.Controllers
         public IActionResult Edit(int Id)
         {
             CourseService courseService = new CourseService(_context);
-            var course = courseService.Read(Id);
+            var course = courseService.ReadSingle(Id);
             if (course == null)
                 return RedirectToAction("Index", new {Message = "error"});
 
@@ -75,7 +93,7 @@ namespace RealProject.Areas.User.Controllers
         public IActionResult Delete(int Id)
         {
             CourseService courseService = new CourseService(_context);
-            var res = courseService.Delete(Id);
+            var res = courseService.DeleteById(Id);
             if (res > 0)
                 return RedirectToAction("Index", new { Message = "success" });
             else
